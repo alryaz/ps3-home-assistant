@@ -101,7 +101,11 @@ class PS3MAPIWrapper:
                                 self._fan_mode = fan_mode
                                 break
                         else:
-                            raise SensorError("Fan mode sensor does not work")
+                            temperature_slider = soup.find('input', type='range', onchange=lambda x: x and '/cpursx3.ps3?fan=' in x)
+                            if temperature_slider:
+                                self._fan_mode = 'Manual'
+                            else:
+                                raise SensorError("Fan mode sensor does not work")
                         
                         if self._fan_mode == 'Dynamic':
                             self._target_temp = float(temperature_text.split(': ')[2].split('°C')[0])
